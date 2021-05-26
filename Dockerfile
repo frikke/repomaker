@@ -24,7 +24,7 @@ RUN echo Etc/UTC > /etc/timezone \
 		'APT::Get::Assume-Yes "true";' \
 		'Dpkg::Use-Pty "0";'\
 		> /etc/apt/apt.conf.d/99headless \
-	&& printf "Package: apksigner fdroidserver s3cmd\nPin: release a=buster-backports\nPin-Priority: 500\n" \
+	&& printf "Package: apksigner libapksig-java fdroidserver s3cmd\nPin: release a=buster-backports\nPin-Priority: 500\n" \
 		> /etc/apt/preferences.d/buster-backports.pref \
 	&& echo "deb http://deb.debian.org/debian/ buster-backports main" \
 		> /etc/apt/sources.list.d/buster-backports.list
@@ -75,3 +75,7 @@ RUN apt-get update && apt-get dist-upgrade && apt-get install \
 	pip3 install -r requirements.txt && \
 	npm install && \
 	./pre-release.sh
+
+
+RUN find /repomaker/ -perm -o=w  -exec chmod go-w {} \;
+RUN chmod 644 /etc/apache2/sites-available/repomaker.conf
